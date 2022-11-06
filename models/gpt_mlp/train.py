@@ -31,7 +31,7 @@ class ClipPoemDataset(Dataset):
         """
         
         """
-        return len(self.captions_token)
+        return len(self.poems_token)
     
     def __getitem__(self, item):
         tokens, mask = self.pad_tokens(item)
@@ -143,7 +143,7 @@ class GPTMLPModel(nn.Module):
         """
         
         """
-        super(GPTMLPModel, self).__init__()
+        super().__init__()
 
         self.device = torch.device('cuda:0')
         self.prefix_length = prefix_length
@@ -177,18 +177,18 @@ class GPTMLPModel(nn.Module):
         """
         return torch.zeros(batch_size, self.prefix_length, dtype=torch.int64, device=self.device)
 
-def load_model(path, epoch_or_latest = '_latest'):
+# def load_model(path, epoch_or_latest = '_latest'):
 
-    if type(epoch_or_latest) is int:
-        epoch_or_latest = f"-{epoch_or_latest:03d}"
+#     if type(epoch_or_latest) is int:
+#         epoch_or_latest = f"-{epoch_or_latest:03d}"
 
-    model = GPTMLPModel(10)
+#     model = GPTMLPModel(10)
 
-    if os.path.isfile(path):
-        print(f"Loading the model from {path}")
-        model.load_state_dict(torch.load(path, map_location=torch.device("cuda:0")))
+#     if os.path.isfile(path):
+#         print(f"Loading the model from {path}")
+#         model.load_state_dict(torch.load(path, map_location=torch.device("cuda:0")))
     
-    return model
+#     return model
 
 def train(dataset, model, lr=2e-5, warmup_steps=5000, output_dir="./models/gpt_mlp/checkpoints/", output_prefix="ki"):
 
@@ -228,7 +228,7 @@ def train(dataset, model, lr=2e-5, warmup_steps=5000, output_dir="./models/gpt_m
             optimizer.zero_grad()
 
             progress.set_postfix({"loss":loss.item()})
-            prohress.update()
+            progress.update()
 
             if (idx + 1) % 1000 == 0:
                 torch.save(
@@ -249,9 +249,11 @@ def main():
 
     """
     prefix_length = 10
-    prefix_dim = 512
+    # prefix_dim = 512
     dataset = ClipPoemDataset("ViT-B_32_train.pkl", prefix_length)
     model = GPTMLPModel()
+
+    train(dataset, model)
     
 
 
