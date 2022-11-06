@@ -12,17 +12,16 @@ def main():
     poem = json.load(f1)['poems']
     f1.close()
 
-    f2 = open("data/poem2img.json")
+    f2 = open("data/poem2img_off.json")
     poem2img = json.load(f2)['poem2img']
     f2.close()
 
-    f3 = open("data/poem2img2.json")
-    poem2img2 = json.load(f3)['poem2img']
-    f3.close()
+    # f3 = open("data/newpoem2img.json")
+    # poem2img2 = json.load(f3)['poem2img']
+    # f3.close()
 
 
     ID = 0
-    END_ID = poem2img2[0]['id']
 
     for i in poem2img:
         data["poem2img"].append(i)
@@ -32,7 +31,7 @@ def main():
     for i in range(ind_ID, len(poem)):
         p = poem[i]
         
-        if p['id'] == END_ID:
+        if p['id'] == 4002:
             break
         for j in range(2):
             obj = {
@@ -45,10 +44,10 @@ def main():
 
             data["poem2img"].append(obj)
 
-    for i in poem2img2:
-        data["poem2img"].append(i)
+    # for i in poem2img2:
+    #     data["poem2img"].append(i)
 
-    with open('data/poem2img_off.json', 'w') as f:
+    with open('data/poem2img.json', 'w') as f:
         json.dump(data, f)
 
 if __name__ == "__main__":
