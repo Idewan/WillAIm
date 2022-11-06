@@ -130,3 +130,11 @@ dmypy.json
 
 #Mac
 .DS_Store
+
+#Stable diffusion
+./stable-diffusion-v1-5/*
+./models/stable-diffusion-v1-5/*
+~/home/ild2105/WillAIm/models/stable-diffusion-v1-5
+models/stable-diffusion-v1-5/
+models/stable-diffusion-v1-5/**
+models/stable-diffusion-v1-5/*
