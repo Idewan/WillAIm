@@ -5,7 +5,7 @@ from tqdm import tqdm
 import torch
 import random
 import json
-
+import os
 
 class Model():
 
@@ -60,6 +60,8 @@ if __name__ == '__main__':
         "info": "Stores image location, prompt used to generate, and poem together",
         "poem2img": []
         }
+    
+    i_save=1
 
     model_id = "CompVis/stable-diffusion-v1-4"
 
@@ -73,7 +75,7 @@ if __name__ == '__main__':
     for sub_data in tqdm(data_poem):
         temp_poem = sub_data['poem']
         c_poem = temp_poem.encode("ascii", "ignore")
-        c_poem = temp_poem.decode()
+        c_poem = c_poem.decode()
 
         poem = prompt_gen.clean_prompt(c_poem)
         prompts = prompt_gen.get_prompts(poem)
@@ -83,18 +85,26 @@ if __name__ == '__main__':
             with autocast("cuda"):
                 image = ldm_model.pipe(prompts[i], guidance_scale=7.5).images[0]
 
-            img_path = f"data/image/{sub_data['ID']}/{i}.png"
+            img_path = f"data/image/{sub_data['id']}/{i}.png"
+            if not os.path.exists(f"data/image/{sub_data['id']}/"):
+                os.makedirs(f"data/image/{sub_data['id']}/")
             image.save(img_path)
 
             data["poem2img"].append({
-                "id":sub_data['ID'],
+                "id":sub_data['id'],
                 "poem":c_poem,
                 "prompt":prompts[i],
                 "img_path":img_path,
                 "keywords":sub_data['keywords']
             })
+        
+        if i_save % 200 == 0:
+            with open("data/poem2img.json", "w") as f:
+                json.dump(data, f)
+        i_save+=1
     
     with open("data/poem2img.json", "w") as f:
         json.dump(data, f)
     
     print("Done!")
+
