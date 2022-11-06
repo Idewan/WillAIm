@@ -20,7 +20,7 @@ class Prompt():
 
     def __init__(self):
         self.prompt_supplement = [
-            "An artistic and dream-like represenation of how it feels for",
+            "An artistic and dream-like representation of how it feels for",
             "An abstract painting of the symbols in",
             "A realistic painting by a dutch master of the symbols",
             "An impressionist painting of the symbols in",
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     f1.close()
 
     for sub_data in tqdm(data_poem):
-        if sub_data['id'] > 1018:
+        if sub_data['id'] > 2836:
             temp_poem = sub_data['poem']
             c_poem = temp_poem.encode("ascii", "ignore")
             c_poem = c_poem.decode()
