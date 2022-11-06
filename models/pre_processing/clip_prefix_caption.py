@@ -6,6 +6,7 @@ import clip
 import json
 import pickle
 import skimage.io as io
+import sys
 
 class PrefixUnit():
 
@@ -69,10 +70,13 @@ def main():
         if not (p_unit.nfsw_image == image).all():
             prefix = p_unit.gen_prefix(image=image)
 
-            embeddings.append(prefix)
-            poems.append(poem)
+            curr_pair['poem'] = poem
+            curr_pair['clip_embedding'] = i
 
-        if i % 500 == 0:
+            embeddings.append(prefix)
+            poems.append(curr_pair)
+
+        if (i+1) % 500 == 0:
             p_unit.save_embeddings(embeddings, poems, out_path)
     
     p_unit.save_embeddings(embeddings, poems, out_path)
@@ -81,6 +85,6 @@ def main():
     
 
 if __name__ == "__main__":
-    exit(main())
+    sys.exit(main())
 
         
