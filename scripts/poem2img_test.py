@@ -2,6 +2,7 @@ from diffusers import StableDiffusionPipeline
 from torch import autocast
 from tqdm import tqdm
 
+import skimage.io as io
 import torch
 import random
 import json
@@ -67,14 +68,16 @@ if __name__ == '__main__':
 
     ldm_model = Model(model_id)
     prompt_gen = Prompt()
+    nfsw_image = io.imread("data/nfsw.png")
 
     f1 = open("data/poem/poem.json")
     data_poem = json.load(f1)["poems"]
     f1.close()
+    count = 0
 
     for sub_data in tqdm(data_poem):
         if sub_data['id'] > 3999:
-            if sub_data['id'] == 5001:
+            if sub_data['id'] == 5001 or count == 1000:
                 break
             temp_poem = sub_data['poem']
             c_poem = temp_poem.encode("ascii", "ignore")
@@ -88,18 +91,20 @@ if __name__ == '__main__':
                 with autocast("cuda"):
                     image = ldm_model.pipe(prompts[i], guidance_scale=7.5).images[0]
 
-                img_path = f"data/image/{sub_data['id']}/{i}.png"
-                if not os.path.exists(f"data/image/{sub_data['id']}/"):
-                    os.makedirs(f"data/image/{sub_data['id']}/")
-                image.save(img_path)
+                if not (nfsw_image == image).all():
+                    count += 1
+                    img_path = f"data/image/{sub_data['id']}/{i}.png"
+                    if not os.path.exists(f"data/image/{sub_data['id']}/"):
+                        os.makedirs(f"data/image/{sub_data['id']}/")
+                    image.save(img_path)
 
-                data["poem2img"].append({
-                    "id":sub_data['id'],
-                    "poem":c_poem,
-                    "prompt":prompts[i],
-                    "img_path":img_path,
-                    "keywords":sub_data['keywords']
-                })
+                    data["poem2img"].append({
+                        "id":sub_data['id'],
+                        "poem":c_poem,
+                        "prompt":prompts[i],
+                        "img_path":img_path,
+                        "keywords":sub_data['keywords']
+                    })
             
     with open("data/test_poem2img.json", "w") as f:
         json.dump(data, f)
