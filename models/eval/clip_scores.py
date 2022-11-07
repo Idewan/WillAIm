@@ -26,8 +26,8 @@ class CLIPScores():
             logits_per_image = out.logits_per_image
             probs = logits_per_image.softmax(dim=1)
 
-            result["Predicted"] = probs[0]
-            result["Base"] = probs[1]
+            result["Predicted"] = probs[0][0]
+            result["Base"] = probs[0][1]
 
         return result
 
