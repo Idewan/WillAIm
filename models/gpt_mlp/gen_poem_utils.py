@@ -22,7 +22,7 @@ class GenPoemUtils():
         self.clip_model, self.preprocess = clip.load("ViT-B/32", device=self.device, jit=False)
 
         #Model
-        self.tokenizer = self.tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+        self.tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
         self.model = GPTMLPModel(prefix_length=10)
         self.model.load_state_dict(torch.load(model_path))
         self.model = self.model.eval()
