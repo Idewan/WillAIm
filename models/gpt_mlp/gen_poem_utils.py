@@ -1,18 +1,18 @@
-import torch
-import numpy as np
-import clip
 import sys
 import os
 #Work around for relative import - clean up later
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from gpt_mlp.gpt_clip_model import GPTMLPModel
+from gpt_clip_model import GPTMLPModel
 from torch import Tensor
 from torch.nn import functional as F
 from transformers import GPT2Tokenizer
 from PIL import Image
 
+import torch
+import numpy as np
+import clip
 
 class GenPoemUtils():
 
