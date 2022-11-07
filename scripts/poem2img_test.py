@@ -73,7 +73,9 @@ if __name__ == '__main__':
     f1.close()
 
     for sub_data in tqdm(data_poem):
-        if sub_data['id'] > 5000:
+        if sub_data['id'] > 3999:
+            if sub_data['id'] == 5001:
+                break
             temp_poem = sub_data['poem']
             c_poem = temp_poem.encode("ascii", "ignore")
             c_poem = c_poem.decode()
@@ -99,12 +101,7 @@ if __name__ == '__main__':
                     "keywords":sub_data['keywords']
                 })
             
-            if i_save % 200 == 0:
-                with open("data/train_poem2img.json", "w") as f:
-                    json.dump(data, f)
-            i_save+=1
-    
-    with open("data/train_poem2img.json", "w") as f:
+    with open("data/test_poem2img.json", "w") as f:
         json.dump(data, f)
     
     print("Done!")
