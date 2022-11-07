@@ -93,9 +93,7 @@ if __name__ == '__main__':
 
                 if not (nfsw_image == image).all():
                     count += 1
-                    img_path = f"data/image_test/{count}/{i}.png"
-                    if not os.path.exists(f"data/image_test/{count}/"):
-                        os.makedirs(f"data/image_test/{count}/")
+                    img_path = f"data/image_test/{count}.png"
                     image.save(img_path)
 
                     data["poem2img"].append({
