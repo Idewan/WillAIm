@@ -3,7 +3,7 @@ from transformers import CLIPProcessor, CLIPModel
 
 import torch
 
-class CLIPScores():
+class CLIPEval():
 
     def __init__(self):
         self.model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
@@ -30,12 +30,3 @@ class CLIPScores():
             result["Base"] = probs[0][1].item()
 
         return result
-
-
-if __name__ == "__main__":
-    import requests
-    url = "http://images.cocodataset.org/val2017/000000039769.jpg"
-    image = requests.get(url, stream=True).raw
-
-    clip = CLIPScores()
-    print(clip.score_poem("a photo of a cat", "a photo of a dog", image))
