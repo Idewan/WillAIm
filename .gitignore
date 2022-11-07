@@ -147,3 +147,6 @@ data/image/**
 models/gpt_mlp/checkpoints/*
 models/gpt_mlp/checkpoints/
 models/gpt_mlp/checkpoints/**
+data/image_test/*
+data/image_test/
+data/image_test/**
