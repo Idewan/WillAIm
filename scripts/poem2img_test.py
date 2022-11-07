@@ -93,13 +93,13 @@ if __name__ == '__main__':
 
                 if not (nfsw_image == image).all():
                     count += 1
-                    img_path = f"data/image/{sub_data['id']}/{i}.png"
-                    if not os.path.exists(f"data/image/{sub_data['id']}/"):
-                        os.makedirs(f"data/image/{sub_data['id']}/")
+                    img_path = f"data/image_test/{count}/{i}.png"
+                    if not os.path.exists(f"data/image_test/{count}/"):
+                        os.makedirs(f"data/image_test/{count}/")
                     image.save(img_path)
 
                     data["poem2img"].append({
-                        "id":sub_data['id'],
+                        "id":count,
                         "poem":c_poem,
                         "prompt":prompts[i],
                         "img_path":img_path,
