@@ -14,7 +14,7 @@ class CLIPScores():
         image = Image.open(image)
 
         inputs = self.processor(text=[poem, base_poem], images=image, return_tensors="pt", padding=True)
-        out = self.model(inputs)
+        out = self.model(**inputs)
         logits_per_image = out.logits_per_image
         probs = logits_per_image.softmax()
 
