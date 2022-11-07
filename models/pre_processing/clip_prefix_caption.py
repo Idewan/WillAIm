@@ -59,6 +59,7 @@ def main():
     
     embeddings = []
     poems = []
+    count = 0
 
     for i in tqdm(range(len(data))):
         curr_pair = data[i]
@@ -71,10 +72,12 @@ def main():
             prefix = p_unit.gen_prefix(image=image)
 
             curr_pair['poem'] = poem
-            curr_pair['clip_embedding'] = i
+            curr_pair['clip_embedding'] = count
 
             embeddings.append(prefix)
             poems.append(curr_pair)
+
+            count += 1
 
         if (i+1) % 500 == 0:
             p_unit.save_embeddings(embeddings, poems, out_path)

@@ -4,10 +4,11 @@ import sys
 import torch
 import torch.nn as nn
 
+from torch.optim import Adam as AdamW
 from torch.nn import functional as nnf
 from torch.utils.data import Dataset, DataLoader
 from enum import Enum
-from transformers import GPT2Tokenizer, GPT2LMHeadModel, AdamW, get_linear_schedule_with_warmup
+from transformers import GPT2Tokenizer, GPT2LMHeadModel, get_linear_schedule_with_warmup
 from transformers import GPTNeoModel, GPTNeoForCausalLM
 from tqdm import tqdm
 
@@ -31,10 +32,13 @@ class ClipPoemDataset(Dataset):
         """
         
         """
-        return len(self.poems_token)
+        return len(self.poems_tokens)
     
     def __getitem__(self, item):
         tokens, mask = self.pad_tokens(item)
+#        print(len(self.prefixes))
+ #       print(len(self.poems2embedding))
+  #      print(item)
         prefix = self.prefixes[self.poems2embedding[item]]
 
         if self.normalize_prefix:
@@ -97,7 +101,7 @@ class ClipPoemDataset(Dataset):
         elif len_tokens > self.max_seq_len:
 
             tokens = tokens[:self.max_seq_len]
-            self.poems_tokens.tokens[item] = tokens
+            self.poems_tokens[item] = tokens
         
         mask = self.get_mask(tokens)
 
@@ -149,13 +153,13 @@ class GPTMLPModel(nn.Module):
         self.prefix_length = prefix_length
         # self.gpt = GPTNeoForCausalLM.from_pretrained("news-gpt-neo-1.3B-keywords-line-by-line-reverse/checkpoint-15000").cuda()
         
-        self.gpt = GPT2LMHeadModel.from_pretrained('gpt2').cuda()
+        self.gpt = GPT2LMHeadModel.from_pretrained('gpt2')
         self.gpt_embedding_size = self.gpt.transformer.wte.weight.shape[1]
         
         self.clip_project = MLP((prefix_size, (self.gpt_embedding_size * prefix_length) // 2,
                                 self.gpt_embedding_size * prefix_length))
 
-    def forward(self, tokens, prefix, mask, labels):
+    def forward(self, tokens, prefix, mask=None, labels=None):
         """
         
         """
@@ -197,7 +201,7 @@ def train(dataset, model, lr=2e-5, warmup_steps=5000, output_dir="./models/gpt_m
     model.train()
 
     #Training parameters
-    batch_size = 32
+    batch_size = 8
     epochs = 10
     optimizer = AdamW(model.parameters(), lr=lr)
     
@@ -220,7 +224,7 @@ def train(dataset, model, lr=2e-5, warmup_steps=5000, output_dir="./models/gpt_m
             outputs = model(tokens, prefix, mask)
 
             logits = outputs.logits[:, dataset.prefix_length-1:-1]
-            loss = nnf.crossentropy(logits.reshape(-1, logits.shape[-1]), tokens.flatten(), ignore_index=0)
+            loss = nnf.cross_entropy(logits.reshape(-1, logits.shape[-1]), tokens.flatten(), ignore_index=0)
             loss.backward()
 
             optimizer.step()
@@ -250,13 +254,14 @@ def main():
     """
     prefix_length = 10
     # prefix_dim = 512
-    dataset = ClipPoemDataset("ViT-B_32_train.pkl", prefix_length)
-    model = GPTMLPModel()
-
+    dataset = ClipPoemDataset("data/ViT-B_32_train.pkl", prefix_length)
+    model = GPTMLPModel(prefix_length)
+    print("All locked and loaded")
     train(dataset, model)
     
 
-
+if __name__ == "__main__":
+    sys.exit(main())
 
 
 

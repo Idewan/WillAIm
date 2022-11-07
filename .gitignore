@@ -142,3 +142,8 @@ models/stable-diffusion-v1-5/*
 data/image/*
 data/image/
 data/image/**
+*.pkl
+*.p
+models/gpt_mlp/checkpoints/*
+models/gpt_mlp/checkpoints/
+models/gpt_mlp/checkpoints/**
