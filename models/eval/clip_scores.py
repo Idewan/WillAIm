@@ -23,7 +23,7 @@ class CLIPScores():
 
 if __name__ == "__main__":
     import requests
-
+    url = "http://images.cocodataset.org/val2017/000000039769.jpg"
     image = requests.get(url, stream=True).raw
 
     clip = CLIPScores()
