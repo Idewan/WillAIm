@@ -1,6 +1,8 @@
 from PIL import Image
 from transformers import CLIPProcessor, CLIPModel
 
+import torch
+
 class CLIPScores():
 
     def __init__(self):
@@ -11,14 +13,23 @@ class CLIPScores():
         """
         
         """
+        result = {
+            "Predicted" : 0,
+            "Base" : 0
+        }
         image = Image.open(image)
 
         inputs = self.processor(text=[poem, base_poem], images=image, return_tensors="pt", padding=True)
-        out = self.model(**inputs)
-        logits_per_image = out.logits_per_image
-        probs = logits_per_image.softmax(dim=1)
 
-        return probs
+        with torch.no_grad():
+            out = self.model(**inputs)
+            logits_per_image = out.logits_per_image
+            probs = logits_per_image.softmax(dim=1)
+
+            result["Predicted"] = probs[0]
+            result["Base"] = probs[1]
+
+        return result
 
 
 if __name__ == "__main__":
