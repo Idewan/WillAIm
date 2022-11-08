@@ -73,6 +73,16 @@ def main():
     results["Min CLIP Score"] = np.min(np.array(clip_base))
     results["Max CLIP Score"] = np.max(np.array(clip_base))
 
+    # results["Mean CLIP Score"] = np.mean(np.array(clip_base))
+    # results["Median CLIP Score"] = np.median(np.array(clip_base))
+    # results["Min CLIP Score"] = np.min(np.array(clip_base))
+    # results["Max CLIP Score"] = np.max(np.array(clip_base))
+
+    # results["Mean CLIP Score"] = np.mean(np.array(clip_base))
+    # results["Median CLIP Score"] = np.median(np.array(clip_base))
+    # results["Min CLIP Score"] = np.min(np.array(clip_base))
+    # results["Max CLIP Score"] = np.max(np.array(clip_base))
+
 if __name__ == "__main__":
     sys.exit(main())
 

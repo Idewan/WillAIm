@@ -17,7 +17,7 @@ class ImageabilityEval():
 
     def __init__(self):
         with open("data/eval/imageability.json", "r") as file:
-            self.dict = json.load(file)
+            self.dict_img = json.load(file)
     
     def score_poem(self, poem):
         n = len(poem.split(" "))
@@ -28,6 +28,6 @@ class ImageabilityEval():
         sum_score = 0
 
         for w in poem:
-            sum_score += self.dict.get(w, default=0)
+            sum_score += self.dict_img.get(w, 0)
         
         return sum_score / n
