@@ -42,7 +42,7 @@ def main():
         "Imageability Scores" : []
     }
     
-    for i in tqdm(range(10))
+    for i in tqdm(range(10)):
         image = io.imread(test_data[i]["img_path"])
         pred_poem = "".join(gen_poem_ut.predict(image))
 
