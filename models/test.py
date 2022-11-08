@@ -43,7 +43,7 @@ def main():
         "Imageability Scores" : []
     }
 
-    clip_base = []
+    clip_pred = []
     
     for i in tqdm(range(10)):
         image = io.imread(test_data[i]["img_path"])
@@ -55,7 +55,7 @@ def main():
         # print("==== CLIP Score ====")
         clip_score = clip_eval.score_poem(pred_poem, test_data[i]["poem"], image)
         results["CLIP Scores"].append(clip_score)
-        clip_base.append(clip_score["Base"])
+        clip_pred.append(clip_score["Predicted"])
 
         # print("==== Distinct-2 Score ====")
         distinct_score = distinct_eval.score_poem(pred_poem)
@@ -68,10 +68,10 @@ def main():
     with open("models/gpt_mlp/scores/score_midterm.json", "w") as f:
         json.dump(results, f)
     
-    results["Mean CLIP Score"] = np.mean(np.array(clip_base))
-    results["Median CLIP Score"] = np.median(np.array(clip_base))
-    results["Min CLIP Score"] = np.min(np.array(clip_base))
-    results["Max CLIP Score"] = np.max(np.array(clip_base))
+    results["Mean CLIP Score"] = np.mean(np.array(clip_pred))
+    results["Median CLIP Score"] = np.median(np.array(clip_pred))
+    results["Min CLIP Score"] = np.min(np.array(clip_pred))
+    results["Max CLIP Score"] = np.max(np.array(clip_pred))
 
     results["Mean Distinct-2 Score"] = np.mean(np.array(results["Distinct-2 Scores"]))
     results["Median Distinct-2 Score"] = np.median(np.array(results["Distinct-2 Scores"]))
