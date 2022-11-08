@@ -45,7 +45,7 @@ def main():
 
     clip_pred = []
     
-    for i in tqdm(range(10)):
+    for i in tqdm(range(len(test_data))):
         image = io.imread(test_data[i]["img_path"])
         pred_poem = "".join(gen_poem_ut.predict(image))
 
