@@ -66,7 +66,7 @@ def main():
     with open("models/gpt_mlp/scores", "w") as f:
         json.dump(results, f)
     
-    results["Mean CLIP Score"] = 
+    # results["Mean CLIP Score"] = 
 
 if __name__ == "__main__":
     sys.exit(main())
