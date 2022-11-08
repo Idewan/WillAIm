@@ -102,7 +102,7 @@ if __name__ == '__main__':
             if i_save % 200 == 0:
                 with open("data/train_poem2img.json", "w") as f:
                     json.dump(data, f)
-            i_save+=1
+            i_save+=2
     
     with open("data/train_poem2img.json", "w") as f:
         json.dump(data, f)
