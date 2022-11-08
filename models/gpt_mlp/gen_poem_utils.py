@@ -42,7 +42,7 @@ class GenPoemUtils():
 
         return self.generate_beam(embed=prefix_embed)
 
-    def generate_beam(self, beam_size: int = 20, prompt=None, embed=None,
+    def generate_beam(self, beam_size: int = 5, prompt=None, embed=None,
                     entry_length=67, temperature=0.85,   stop_token: str = ".",):
         """
         

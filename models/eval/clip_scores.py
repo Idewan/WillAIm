@@ -19,7 +19,7 @@ class CLIPEval():
         }
         image = Image.fromarray(image)
 
-        inputs = self.processor(text=[poem, base_poem], images=image, return_tensors="pt", padding=True)
+        inputs = self.processor(text=[poem[:len(base_poem)], base_poem], images=image, return_tensors="pt", padding=True)
 
         with torch.no_grad():
             out = self.model(**inputs)
