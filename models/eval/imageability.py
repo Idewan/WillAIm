@@ -20,7 +20,11 @@ class ImageabilityEval():
             self.dict = json.load(file)
     
     def score_poem(self, poem):
-        n = len(poem)
+        n = len(poem.split(" "))
+        
+        if n == 0:
+            return 0
+
         sum_score = 0
 
         for w in poem:
