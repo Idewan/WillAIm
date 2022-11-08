@@ -65,7 +65,7 @@ def main():
         imageability_score = imageability_eval.score_poem(pred_poem)
         results["Imageability Scores"].append(imageability_score)
     
-    with open("models/gpt_mlp/scores", "w") as f:
+    with open("models/gpt_mlp/scores/score_midterm.json", "w") as f:
         json.dump(results, f)
     
     results["Mean CLIP Score"] = np.mean(np.array(clip_base))
@@ -73,15 +73,15 @@ def main():
     results["Min CLIP Score"] = np.min(np.array(clip_base))
     results["Max CLIP Score"] = np.max(np.array(clip_base))
 
-    # results["Mean CLIP Score"] = np.mean(np.array(clip_base))
-    # results["Median CLIP Score"] = np.median(np.array(clip_base))
-    # results["Min CLIP Score"] = np.min(np.array(clip_base))
-    # results["Max CLIP Score"] = np.max(np.array(clip_base))
+    results["Mean Distinct-2 Score"] = np.mean(np.array(results["Distinct-2 Scores"]))
+    results["Median Distinct-2 Score"] = np.median(np.array(results["Distinct-2 Scores"]))
+    results["Min Distinct-2 Score"] = np.min(np.array(results["Distinct-2 Scores"]))
+    results["Max Distinct-2 Score"] = np.max(np.array(results["Distinct-2 Scores"]))
 
-    # results["Mean CLIP Score"] = np.mean(np.array(clip_base))
-    # results["Median CLIP Score"] = np.median(np.array(clip_base))
-    # results["Min CLIP Score"] = np.min(np.array(clip_base))
-    # results["Max CLIP Score"] = np.max(np.array(clip_base))
+    results["Mean Imageability Score"] = np.mean(np.array(results["Imageability Scores"]))
+    results["Median Imageability Score"] = np.median(np.array(results["Imageability Scores"]))
+    results["Min Imageability Score"] = np.min(np.array(results["Imageability Scores"]))
+    results["Max Imageability Score"] = np.max(np.array(results["Imageability Scores"]))
 
 if __name__ == "__main__":
     sys.exit(main())
