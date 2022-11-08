@@ -46,11 +46,6 @@ def main():
         image = io.imread(test_data[i]["img_path"])
         pred_poem = "".join(gen_poem_ut.predict(image))
 
-        print(pred_poem)
-        print(len(pred_poem))
-        print(test_data[i]["poem"])
-        print(len(test_data[i]["poem"]))
-
         # print("Poem {1}")
         results["Poems"].append(pred_poem)
         # print("==== CLIP Score ====")
