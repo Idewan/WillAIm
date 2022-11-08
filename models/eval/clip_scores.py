@@ -18,7 +18,7 @@ class CLIPEval():
         }
 
         image = self.preprocess(Image.fromarray(image)).unsqueeze(0).to(self.device)
-        text = clip.tokenize([poem, base_poem]).to(self.device)
+        text = clip.tokenize([poem[:300], base_poem[:300]]).to(self.device)
 
         with torch.no_grad():
             image_features = model.encode_image(image)
