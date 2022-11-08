@@ -83,6 +83,9 @@ def main():
     results["Min Imageability Score"] = np.min(np.array(results["Imageability Scores"]))
     results["Max Imageability Score"] = np.max(np.array(results["Imageability Scores"]))
 
+    with open("models/gpt_mlp/scores/score_midterm.json", "w") as f:
+        json.dump(results, f)
+
 if __name__ == "__main__":
     sys.exit(main())
 
