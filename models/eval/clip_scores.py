@@ -17,7 +17,7 @@ class CLIPEval():
             "Predicted" : 0,
             "Base" : 0
         }
-        image = Image.open(image)
+        image = Image.fromarray(image)
 
         inputs = self.processor(text=[poem, base_poem], images=image, return_tensors="pt", padding=True)
 

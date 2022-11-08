@@ -4,7 +4,7 @@ import os
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from gpt_clip_model import GPTMLPModel
+from gpt_mlp.gpt_clip_model import GPTMLPModel
 from torch import Tensor
 from torch.nn import functional as F
 from transformers import GPT2Tokenizer
@@ -36,7 +36,7 @@ class GenPoemUtils():
         image_pp = self.preprocess(Image.fromarray(image)).unsqueeze(0).to(self.device)
         
         with torch.no_grad():
-            prefix = self.clip_model.encode_image(image_pp).to(self.device)
+            prefix = self.clip_model.encode_image(image_pp).to(self.device).float()
 
         prefix_embed = self.model.clip_project(prefix).reshape(1, 10, -1)
 
