@@ -41,24 +41,25 @@ def main():
         "Distinct-2 Scores" : [],
         "Imageability Scores" : []
     }
+
+    clip_base = []
     
     for i in tqdm(range(10)):
         image = io.imread(test_data[i]["img_path"])
         pred_poem = "".join(gen_poem_ut.predict(image))
 
-        print(pred_poem)
-        print(len(pred_poem))
-        print(test_data[i]["poem"])
-        print(len(test_data[i]["poem"]))
-
         # print("Poem {1}")
         results["Poems"].append(pred_poem)
+
         # print("==== CLIP Score ====")
         clip_score = clip_eval.score_poem(pred_poem, test_data[i]["poem"], image)
-        results["CLIP Scores"].append(clip_score[0])
+        results["CLIP Scores"].append(clip_score)
+        clip_base.append(clip_score["Base"])
+
         # print("==== Distinct-2 Score ====")
         distinct_score = distinct_eval.score_poem(pred_poem)
         results["Distinct-2 Scores"].append(distinct_score)
+        
         # print("==== Imageability Score ====")
         imageability_score = imageability_eval.score_poen(pred_poem)
         results["Imageability Scores"].append(imageability_score)

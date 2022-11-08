@@ -1,13 +1,11 @@
 from PIL import Image
-from transformers import CLIPProcessor, CLIPModel
-
+import clip
 import torch
 
 class CLIPEval():
 
     def __init__(self):
-        self.model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
-        self.processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+        self.model, self.preprocess = clip.load("ViT-B/32", device=torch.device('cuda:0'))
     
     def score_poem(self, poem, base_poem, image):
         """
@@ -17,14 +15,15 @@ class CLIPEval():
             "Predicted" : 0,
             "Base" : 0
         }
-        image = Image.fromarray(image)
-
-        inputs = self.processor(text=[poem[:len(base_poem)], base_poem], images=image, return_tensors="pt", padding=True)
+        image = self.preprocess(Image.fromarray(image)).unsqueeze(0).to(device)
+        text = clip.tokenize([poem, base_poem]).to(device)
 
         with torch.no_grad():
-            out = self.model(**inputs)
-            logits_per_image = out.logits_per_image
-            probs = logits_per_image.softmax(dim=1)
+            image_features = model.encode_image(image)
+            text_features = model.encode_text(text)
+
+            logits_per_image, logits_per_text = model(image, text)
+            probs = logits_per_image.softmax(dim=-1).cpu().numpy()
 
             result["Predicted"] = probs[0][0].item()
             result["Base"] = probs[0][1].item()
