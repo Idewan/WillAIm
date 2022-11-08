@@ -6,7 +6,7 @@ class DistinctEval():
     def __init__(self):
         self.distinct = Distinct()
 
-    def reset_distinct():
+    def reset_distinct(self):
         self.distinct = Distinct()
     
     def score_poem(self, poem):
