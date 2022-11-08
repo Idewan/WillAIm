@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 import skimage.io as io
 import json
-import nump
+import numpy as np
 
 def main():
     with open("data/test_poem2img.json", "r") as file:
