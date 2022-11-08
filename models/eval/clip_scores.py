@@ -5,8 +5,9 @@ import torch
 class CLIPEval():
 
     def __init__(self):
-        self.model, self.preprocess = clip.load("ViT-B/32", device=torch.device('cuda:0'))
-    
+        self.device = torch.device('cuda:0')
+        self.model, self.preprocess = clip.load("ViT-B/32", device=self.device)
+
     def score_poem(self, poem, base_poem, image):
         """
         
@@ -15,8 +16,9 @@ class CLIPEval():
             "Predicted" : 0,
             "Base" : 0
         }
-        image = self.preprocess(Image.fromarray(image)).unsqueeze(0).to(device)
-        text = clip.tokenize([poem, base_poem]).to(device)
+
+        image = self.preprocess(Image.fromarray(image)).unsqueeze(0).to(self.device)
+        text = clip.tokenize([poem, base_poem]).to(self.device)
 
         with torch.no_grad():
             image_features = model.encode_image(image)
