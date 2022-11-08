@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 import skimage.io as io
 import json
+import nump
 
 def main():
     with open("data/test_poem2img.json", "r") as file:
@@ -59,15 +60,18 @@ def main():
         # print("==== Distinct-2 Score ====")
         distinct_score = distinct_eval.score_poem(pred_poem)
         results["Distinct-2 Scores"].append(distinct_score)
-        
+
         # print("==== Imageability Score ====")
-        imageability_score = imageability_eval.score_poen(pred_poem)
+        imageability_score = imageability_eval.score_poem(pred_poem)
         results["Imageability Scores"].append(imageability_score)
     
     with open("models/gpt_mlp/scores", "w") as f:
         json.dump(results, f)
     
-    # results["Mean CLIP Score"] = 
+    results["Mean CLIP Score"] = np.mean(np.array(clip_base))
+    results["Median CLIP Score"] = np.median(np.array(clip_base))
+    results["Min CLIP Score"] = np.min(np.array(clip_base))
+    results["Max CLIP Score"] = np.max(np.array(clip_base))
 
 if __name__ == "__main__":
     sys.exit(main())
