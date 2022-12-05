@@ -23,20 +23,9 @@ class PrefixUnit():
         image_pp = self.preprocess(Image.fromarray(image)).unsqueeze(0).to(self.device)
         
         with torch.no_grad():
-            prefix = self.clip_model.encode_image(image_pp).to(self.device)
+            prefix = self.clip_model.encode_image(image_pp).cpu()
         
         return prefix
-    
-    def process_poem(self, poem):
-        """
-        
-        """
-        c_poem = poem.encode("ascii", "ignore")
-        c_poem = c_poem.decode()
-
-        c_poem = c_poem.replace('\r', '')
-
-        return c_poem
 
     def save_embeddings(self, embeddings, poems, out_path):
         """
@@ -49,12 +38,12 @@ class PrefixUnit():
 
 
 
-def main():
+def main(file_name):
     p_unit = PrefixUnit()
 
     out_path = f"data/{p_unit.clip_model_name}_train.pkl"
 
-    with open('data/poem2img.json', 'r') as f:
+    with open('data/{file_name}.json', 'r') as f:
         data = json.load(f)["poem2img"]
     
     embeddings = []
@@ -63,7 +52,6 @@ def main():
 
     for i in tqdm(range(len(data))):
         curr_pair = data[i]
-        poem = p_unit.process_poem(curr_pair['poem'])
         img_path = curr_pair['img_path']
 
         image = io.imread(img_path)
@@ -71,7 +59,6 @@ def main():
         if not (p_unit.nfsw_image == image).all():
             prefix = p_unit.gen_prefix(image=image)
 
-            curr_pair['poem'] = poem
             curr_pair['clip_embedding'] = count
 
             embeddings.append(prefix)
@@ -83,11 +70,10 @@ def main():
             p_unit.save_embeddings(embeddings, poems, out_path)
     
     p_unit.save_embeddings(embeddings, poems, out_path)
-
-
-    
+    print(f"We have {count} training examples.")
 
 if __name__ == "__main__":
-    sys.exit(main())
+    file_name = sys.argv[1] #train_nws_poem2img.json or train_poem2img.json
+    sys.exit(main(file_name))
 
         
