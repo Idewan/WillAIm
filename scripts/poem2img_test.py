@@ -50,8 +50,8 @@ class Prompt():
         prompt_1_supp = self.prompt_supplement[supplement_1_ind]
         prompt_2_supp = self.prompt_supplement[supplement_2_ind]
         
-        prompt_1 = prompt_1_supp + "\"" + poem + "\""
-        prompt_2 = prompt_2_supp + "\"" + poem + "\""
+        prompt_1 = prompt_1_supp + " \"" + poem + "\""
+        prompt_2 = prompt_2_supp + " \"" + poem + "\""
 
         return [prompt_1, prompt_2]
 
@@ -80,7 +80,7 @@ if __name__ == '__main__':
             if sub_data['id'] == 5001 or count == 1000:
                 break
             temp_poem = sub_data['poem']
-            c_poem = temp_poem.encode("ascii", "ignore")
+            c_poem = temp_poem.encode("UTF-8", "ignore")
             c_poem = c_poem.decode()
 
             poem = prompt_gen.clean_prompt(c_poem)

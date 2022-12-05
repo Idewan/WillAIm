@@ -49,8 +49,8 @@ class Prompt():
         prompt_1_supp = self.prompt_supplement[supplement_1_ind]
         prompt_2_supp = self.prompt_supplement[supplement_2_ind]
         
-        prompt_1 = prompt_1_supp + "\"" + poem + "\""
-        prompt_2 = prompt_2_supp + "\"" + poem + "\""
+        prompt_1 = prompt_1_supp + " \"" + poem + "\""
+        prompt_2 = prompt_2_supp + " \"" + poem + "\""
 
         return [prompt_1, prompt_2]
 
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         "poem2img": []
         }
     
-    i_save=1
+    i_save=0
 
     model_id = "CompVis/stable-diffusion-v1-4"
 
@@ -73,9 +73,9 @@ if __name__ == '__main__':
     f1.close()
 
     for sub_data in tqdm(data_poem):
-        if sub_data['id'] > 5000:
+        if sub_data['id'] > 13650:
             temp_poem = sub_data['poem']
-            c_poem = temp_poem.encode("ascii", "ignore")
+            c_poem = temp_poem.encode("UTF-8", "ignore")
             c_poem = c_poem.decode()
 
             poem = prompt_gen.clean_prompt(c_poem)
@@ -99,12 +99,14 @@ if __name__ == '__main__':
                     "keywords":sub_data['keywords']
                 })
             
-            if i_save % 200 == 0:
-                with open("data/train_poem2img.json", "w") as f:
-                    json.dump(data, f)
+            if i_save % 200 == 0 and i_save != 0:
+                with open("data/train_new_new_poem2img.json", "w") as f:
+                    json.dumps(data, f, ensure_ascii=False)
+            if i_save == 16000:
+                break
             i_save+=2
     
-    with open("data/train_poem2img.json", "w") as f:
-        json.dump(data, f)
+    with open("data/train_new_new_poem2img.json", "w") as f:
+        json.dumps(data, f, ensure_ascii=False)
     
     print("Done!")
