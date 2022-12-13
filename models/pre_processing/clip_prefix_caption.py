@@ -43,7 +43,7 @@ def main(file_name):
 
     out_path = f"data/{p_unit.clip_model_name}_train.pkl"
 
-    with open('data/{file_name}.json', 'r') as f:
+    with open(f'data/{file_name}', 'r') as f:
         data = json.load(f)["poem2img"]
     
     embeddings = []

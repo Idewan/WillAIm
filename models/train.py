@@ -36,9 +36,6 @@ class ClipPoemDataset(Dataset):
     
     def __getitem__(self, item):
         tokens, mask = self.pad_tokens(item)
-#        print(len(self.prefixes))
- #       print(len(self.poems2embedding))
-  #      print(item)
         prefix = self.prefixes[self.poems2embedding[item]]
 
         if self.normalize_prefix:
@@ -194,7 +191,7 @@ class GPTMLPModel(nn.Module):
     
 #     return model
 
-def train(dataset, model, lr=2e-5, warmup_steps=5000, output_dir="./models/gpt_mlp/checkpoints/", output_prefix="ki"):
+def train(dataset, model, lr=2e-5, warmup_steps=5000, output_dir="./models/gpt_mlp/checkpoints_nws/", output_prefix="ki"):
 
     device = torch.device('cuda:0')
     model = model.to(device)
@@ -248,20 +245,21 @@ def train(dataset, model, lr=2e-5, warmup_steps=5000, output_dir="./models/gpt_m
             )
     return model
 
-def main():
+def main(file_name):
     """
 
     """
     prefix_length = 10
     # prefix_dim = 512
-    dataset = ClipPoemDataset("data/ViT-B_32_train.pkl", prefix_length)
+    dataset = ClipPoemDataset(f"data/{file_name}", prefix_length)
     model = GPTMLPModel(prefix_length)
     print("All locked and loaded")
     train(dataset, model)
     
 
 if __name__ == "__main__":
-    sys.exit(main())
+    embeddings = sys.argv[1]
+    sys.exit(main(embeddings))
 
 
 

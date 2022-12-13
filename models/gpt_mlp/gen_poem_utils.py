@@ -85,7 +85,7 @@ class GenPoemUtils():
                     scores_sum_average, next_tokens = scores_sum_average.view(-1).topk(
                         beam_size, -1
                     )
-                    next_tokens_source = next_tokens // scores_sum.shape[1]
+                    next_tokens_source = torch.div(next_tokens, scores_sum.shape[1], rounding_mode='floor')
                     seq_lengths = seq_lengths[next_tokens_source]
                     next_tokens = next_tokens % scores_sum.shape[1]
                     next_tokens = next_tokens.unsqueeze(1)
