@@ -13,21 +13,14 @@ import symbol_sentiment
 from model import *
 import os
 
-# class GenPoemUtilsMultiM:
-#     def __init__(self):
-#         self.stuff =0
-
-# def generate_poem(self, img_feature):
 def generate_poem(img_feature):
     return model.test_one_image(img_feature)
 
-# def data_trans(self, img, shape, mu):
 def data_trans(img, shape, mu):
     transformed_img = img.transpose((2, 0, 1)) * 255
-    transformed_img -= mu[:, np.newaxis, np.newaxis]
+    transformed_img -= mu[:, np.newaxis, np.newaxis];
     return transformed_img
 
-# def crop_lit_centor(self, img, mu, img_len = 224):
 def crop_lit_centor(img, mu, img_len = 224):
     [n,m,_]=img.shape
     if m>n:
@@ -38,12 +31,11 @@ def crop_lit_centor(img, mu, img_len = 224):
         m = 256
     return data_trans(cv2.resize(img,(m,n))/255.0, shape=(1,3,n,m), mu=mu)[:,int((n-img_len)/2):int((n+img_len)/2),int((m-img_len)/2):int((m+img_len)/2)]
 
-# def get_mod(self, output_name = 'relu7_output', sym = None, img_len = 224):
 def get_mod(output_name = 'relu7_output', sym = None, img_len = 224):
     if sym is None:
         vgg = VGG()
         sym = vgg.get_symbol(num_classes = 1000, 
-                blocks = [(2, 64),
+                  blocks = [(2, 64),
                             (2, 128),
                             (3, 256), 
                             (3, 512),
@@ -63,7 +55,6 @@ def get_mod(output_name = 'relu7_output', sym = None, img_len = 224):
     return mod
 
 
-# def get_obj_feature(self, img):
 def get_obj_feature(img):
     mu = np.array([104,117,123])
     transformed_img = crop_lit_centor(img, mu)
@@ -72,7 +63,6 @@ def get_obj_feature(img):
     outputs = object_model.get_outputs()[0].asnumpy()
     return outputs
 
-# def get_scene_feature(self, img):
 def get_scene_feature(img):
     mu = np.array([105.487823486,113.741088867,116.060394287])
     transformed_img = crop_lit_centor(img, mu)
@@ -81,7 +71,6 @@ def get_scene_feature(img):
     outputs = scene_model.get_outputs()[0].asnumpy()
     return outputs
 
-# def get_sentiment_feature(self, img):
 def get_sentiment_feature(img):
     mu = np.array([97.0411,105.423,111.677])
     transformed_img = crop_lit_centor(img, mu, img_len = 227)
@@ -90,7 +79,6 @@ def get_sentiment_feature(img):
     outputs = sentiment_model.get_outputs()[0].asnumpy()
     return outputs
 
-# def extract_feature(self, image_file):
 def extract_feature(image_file):
     img = cv2.imread(image_file)
     assert img is not None, IOError(
@@ -114,31 +102,32 @@ def extract_feature(image_file):
     return img_feature
 
 if __name__ == '__main__':
-    with open("test_poem2img.json", "r") as file:
-        test_data = json.load(file)["poem2img"]
-    
-    #Load extractor and Model
     ctx = [mx.cpu()]
 
     feature_names = ['object', 'scene', 'Sentiment']
     Batch = namedtuple('Batch', ['data'])
 
     object_model = get_mod()
-    object_model.load_params('m_adv/code/model/object.params')
-    
+    object_model.load_params('../model/object.params')
+
     scene_model = get_mod()
-    scene_model.load_params('m_adv/code/model/scene.params')
+    scene_model.load_params('../model/scene.params')
 
     sentiment_model = get_mod(sym = symbol_sentiment.get_sym(), img_len = 227)
-    sentiment_model.load_params('m_adv/code/model/Sentiment.params')
+    sentiment_model.load_params('../model/Sentiment.params')
 
-    ckpt_file = 'm_adv/code/model/ckpt/epoch03_lr0.000005.ckpt'
+    ckpt_file = '../model/ckpt/epoch03_lr0.000005.ckpt'
     sess_config = tf.ConfigProto()
+    # os.environ['CUDA_VISIBLE_DEVICES'] = str(config.gpus)
     sess = tf.InteractiveSession(config=sess_config)
     batch_size = 1
     model = SeqGAN(sess, batch_size)
+
     model.load_params(ckpt_file)
 
+    with open("test_poem2img.json", "r") as file:
+        test_data = json.load(file)["poem2img"]
+    
     results = {
         "Mean CLIP Score" : 0,
         "Median CLIP Score" : 0,
@@ -157,17 +146,14 @@ if __name__ == '__main__':
         "Distinct-2 Scores" : [],
         "Imageability Scores" : []
     }
-
-    clip_pred = []
     
     for i in tqdm(range(len(test_data))):
-        # image = io.imread(test_data[i]["img_path"])
-
-        img_feature = extract_feature(test_data[i]["img_path"][5:])
-        pred_poem = '\n' + generate_poem(img_feature)[0].replace('\n', '\n') + '\n'
-
-        # print("Poem {1}")
-        results["Poems"].append(pred_poem)
-
-    with open("models/m_adv/scores/poems.json", "w") as f:
+        path = "image_test/" + str(i+1) + ".png"
+        img_feature = extract_feature(path)
+        results["Poems"].append('\n' + generate_poem(img_feature)[0].replace('\n', '\n') + '\n')
+    
+    with open("poems.json", "w") as f:
         json.dump(results, f)
+
+if __name__ == "__main__":
+    print("Hello world")

@@ -1,4 +1,5 @@
 import json
+import re
 
 class ImageabilityEval():
     """
@@ -17,17 +18,28 @@ class ImageabilityEval():
 
     def __init__(self):
         with open("data/eval/imageability.json", "r") as file:
-            self.dict_img = json.load(file)
+            self.dict_img = json.load(file)["words"]
+    
+    def cleanPoem(self, poem):
+        poem = poem.replace('\r', '')
+        poem = poem.replace('\n', '')
+        poem = re.sub(' +', ' ', poem.lower())
+        return poem.split(" ")
+        
     
     def score_poem(self, poem):
-        n = len(poem.split(" "))
-        
+        """
+
+        """
+        poem_split = self.cleanPoem(poem)
+        n = len(poem_split)
+
         if n == 0:
             return 0
 
         sum_score = 0
 
-        for w in poem:
+        for w in poem_split:
             sum_score += self.dict_img.get(w, 0)
         
         return sum_score / n

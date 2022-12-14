@@ -4,7 +4,7 @@ import os
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-from gpt_mlp.gpt_clip_model import GPTMLPModel
+from gpt_transformer.gpt_transformer_model import GPTTransformerModel
 from torch import Tensor
 from torch.nn import functional as F
 import torch.nn as nn
@@ -24,7 +24,7 @@ class Decoding:
 
         #Model
         self.tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-        self.model = GPTMLPModel(prefix_length=10)
+        self.model = GPTTransformerModel(10, 10)
         self.model.load_state_dict(torch.load(model_path))
         self.model = self.model.eval()
         self.model = self.model.to(self.device)
@@ -101,8 +101,4 @@ class Decoding:
     
 
             
-                
-
-
-
-
+        

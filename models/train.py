@@ -75,18 +75,29 @@ def main(file_name, model):
 
     """
     prefix_length = 10
+    clip_length = 10
 
     dataset = ClipPoemDataset(f"data/{file_name}", prefix_length)
 
     if model == 1:
         model = GPTMLPModel(prefix_length)
+
+        if file_name[-7:-4] == 'nws':
+            directory = "./models/gpt_mlp/checkpoints_nws/"
+        else:
+            directory = "./models/gpt_mlp/checkpoints/"
     elif model == 2:
-        model = GPTTransformerModel()
+        model = GPTTransformerModel(prefix_length, clip_length, prefix_size=512)
+
+        if file_name[-7:-4] == 'nws':
+            directory = "./models/gpt_transformer/checkpoints_nws/"
+        else:
+            directory = "./models/gpt_transformer/checkpoints/"
     else:
         return -1
-        
+
     print("All locked and loaded")
-    train(dataset, model)
+    train(dataset, model, output_dir=directory)
     
 
 if __name__ == "__main__":

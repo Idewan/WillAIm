@@ -163,3 +163,9 @@ scene.params
 Sentiment.params
 word2id_5.json
 *.tar
+models/gpt_transformer/checkpoints/*
+models/gpt_transformer/checkpoints/
+models/gpt_transformer/checkpoints/**
+models/gpt_transformer/checkpoints_nws/*
+models/gpt_transformer/checkpoints_nws/
+models/gpt_transformer/checkpoints_nws/**

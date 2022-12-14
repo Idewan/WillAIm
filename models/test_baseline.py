@@ -15,20 +15,13 @@ import json
 import numpy as np
 
 def main():
-    with open("data/test_poem2img.json", "r") as file:
+    with open("data/train_poem2img.json", "r") as file:
         test_data = json.load(file)["poem2img"]
     
     distinct_eval = DistinctEval()
     imageability_eval = ImageabilityEval()
-    clip_eval = CLIPEval()
-
-    gen_poem_ut = GenPoemUtils("models/gpt_mlp/checkpoints/ki-009.pt")
 
     results = {
-        "Mean CLIP Score" : 0,
-        "Median CLIP Score" : 0,
-        "Max CLIP Score" : 0,
-        "Min CLIP Score" : 0,
         "Mean Distinct-2 Score" : 0,
         "Median Distinct-2 Score" : 0,
         "Max Distinct-2 Score" : 0,
@@ -37,7 +30,6 @@ def main():
         "Median Imageability Score" : 0,
         "Max Imageability Score" : 0,
         "Min Imageability Score" : 0,
-        "Poems" : [],
         "CLIP Scores" : [],
         "Distinct-2 Scores" : [],
         "Imageability Scores" : []
@@ -46,32 +38,19 @@ def main():
     clip_pred = []
     
     for i in tqdm(range(len(test_data))):
-        image = io.imread(test_data[i]["img_path"])
-        pred_poem = "".join(gen_poem_ut.predict(image))
+        if i % 2 == 0:
+            pred_poem = test_data[i]["poem"]
 
-        # print("Poem {1}")
-        results["Poems"].append(pred_poem)
+            # print("==== Distinct-2 Score ====")
+            distinct_score = distinct_eval.score_poem(pred_poem)
+            results["Distinct-2 Scores"].append(distinct_score)
 
-        # print("==== CLIP Score ====")
-        clip_score = clip_eval.score_poem(pred_poem, test_data[i]["poem"], image)
-        results["CLIP Scores"].append(clip_score)
-        clip_pred.append(clip_score["Predicted"])
-
-        # print("==== Distinct-2 Score ====")
-        distinct_score = distinct_eval.score_poem(pred_poem)
-        results["Distinct-2 Scores"].append(distinct_score)
-
-        # print("==== Imageability Score ====")
-        imageability_score = imageability_eval.score_poem(pred_poem)
-        results["Imageability Scores"].append(imageability_score)
+            # print("==== Imageability Score ====")
+            imageability_score = imageability_eval.score_poem(pred_poem)
+            results["Imageability Scores"].append(imageability_score)
     
-    with open("models/gpt_mlp/scores/score_midterm.json", "w") as f:
+    with open("models/eval/score_baseline.json", "w") as f:
         json.dump(results, f)
-    
-    results["Mean CLIP Score"] = np.mean(np.array(clip_pred))
-    results["Median CLIP Score"] = np.median(np.array(clip_pred))
-    results["Min CLIP Score"] = np.min(np.array(clip_pred))
-    results["Max CLIP Score"] = np.max(np.array(clip_pred))
 
     results["Mean Distinct-2 Score"] = np.mean(np.array(results["Distinct-2 Scores"]))
     results["Median Distinct-2 Score"] = np.median(np.array(results["Distinct-2 Scores"]))
@@ -83,7 +62,7 @@ def main():
     results["Min Imageability Score"] = np.min(np.array(results["Imageability Scores"]))
     results["Max Imageability Score"] = np.max(np.array(results["Imageability Scores"]))
 
-    with open("models/gpt_mlp/scores/score_midterm.json", "w") as f:
+    with open("models/eval/score_baseline.json", "w") as f:
         json.dump(results, f)
 
 if __name__ == "__main__":
