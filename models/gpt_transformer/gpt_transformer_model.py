@@ -15,7 +15,9 @@ from transformers import GPT2Tokenizer, GPT2LMHeadModel, get_linear_schedule_wit
 from transformers import GPTNeoModel, GPTNeoForCausalLM
 from tqdm import tqdm
 
-# START
+# START: COPIED FROM https://github.com/rmokady/CLIP_prefix_caption
+# Could not get the Pytorch Transformer modules to work due to some unresolved issue
+# present in GitHub. So I decided to implement the CLIP/CAP transformer.
 class MlpTransformer(nn.Module):
     def __init__(self, in_dim, h_dim, act=nnf.relu, dropout=0.5):
         super().__init__()
@@ -123,6 +125,7 @@ class Transformer(nn.Module):
                 layers.append(TransformerLayer(dim_self, dim_ref, num_heads, mlp_ratio, act=act, norm_layer=norm_layer))
         self.layers = nn.ModuleList(layers)
 
+# END: COPIED FROM https://github.com/rmokady/CLIP_prefix_caption
 
 class TransformerModel(nn.Module):
 

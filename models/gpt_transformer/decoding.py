@@ -42,11 +42,11 @@ class Decoding:
 
         return self.generate_nucleus(embed=prefix_embed)
 
+    #STAR: COPIED + CHANGED FROM https://gist.github.com/thomwolf/1a5a29f6962089e871b94cbd09daf317
     def generate_nucleus(self, p: int = 0.9, embed=None,
                         entry_length=77, stop_token: str = "."):
         #Initialize
         self.model.eval()
-        # self.nucleus_sampling = NucleusSampling(p=p)
         stop_token_index = self.tokenizer.encode(stop_token)[0]
         filter_value = -float("Inf")
 
@@ -98,6 +98,7 @@ class Decoding:
             output_text = self.tokenizer.decode(output_list)
         
         return output_text
+    #END: COPIED FROM https://gist.github.com/thomwolf/1a5a29f6962089e871b94cbd09daf317
     
 
             
