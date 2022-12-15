@@ -1,14 +1,14 @@
 {
-    "Mean CLIP Score": 0.4157611225247383,
-    "Median CLIP Score": 0.3023681640625,
+    "Mean CLIP Score": 0.4254620268344879,
+    "Median CLIP Score": 0.33447265625,
     "Max CLIP Score": 1.0,
     "Min CLIP Score": 0.0,
     "Mean Distinct-2 Score": 0.49634655093067875,
     "Median Distinct-2 Score": 0.4963235294117647,
     "Max Distinct-2 Score": 0.7225433526011561,
     "Min Distinct-2 Score": 0.2028985507246377,
-    "Mean Imageability Score": 0.5167840843156141,
-    "Median Imageability Score": 0.5182820751786269,
+    "Mean Imageability Score": 0.519558678086093,
+    "Median Imageability Score": 0.5204131235827665,
     "Max Imageability Score": 0.756021505376344,
     "Min Imageability Score": 0.18053333333333335,
     "Poems": [

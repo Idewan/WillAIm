@@ -21,13 +21,13 @@ def main():
     mlp_poems = []
 
     #Get GPT poems
-    with open("models/gpt3/scores/score_final", "r") as f:
+    with open("models/gpt3/scores/score_final.json", "r") as f:
         gpt = json.load(f)["Poems"]
-    with open("models/m_adv/scores/score_final", "r") as f:
+    with open("models/m_adv/scores/score_final.json", "r") as f:
         multim = json.load(f)["Poems"]
-    with open("models/gpt_mlp/scores/score_final", "r") as f:
+    with open("models/gpt_mlp/scores/score_final.json", "r") as f:
         mlp = json.load(f)["Poems"]
-    with open("models/gpt_transformer/scores/score_final", "r") as f:
+    with open("models/gpt_transformer/scores/score_nws_final.json", "r") as f:
         transformer = json.load(f)["Poems"]
 
     for i in indices:
